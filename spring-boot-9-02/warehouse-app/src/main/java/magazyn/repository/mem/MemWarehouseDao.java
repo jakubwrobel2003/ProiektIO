@@ -3,10 +3,11 @@ package magazyn.repository.mem;
 import magazyn.repository.WarehouseDao;
 import magazyn.model.Warehouse;
 import magazyn.model.Product;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Component("WarehouseDao")
 public class MemWarehouseDao implements WarehouseDao {
 
     @Override

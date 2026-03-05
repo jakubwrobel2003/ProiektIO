@@ -2,9 +2,10 @@ package magazyn.repository.mem;
 
 import magazyn.repository.ProducerDao;
 import magazyn.model.Producer;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
-
+@Component
 public class MemProducerDao implements ProducerDao {
     @Override
     public List<Producer> findAll() {

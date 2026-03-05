@@ -7,10 +7,14 @@ import magazyn.model.Warehouse;
 import magazyn.model.Producer;
 import magazyn.model.Product;
 import magazyn.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.logging.Logger;
-
+@Component
+@Scope("prototype")
 public class ProductServiceBean implements ProductService {
 
     private static final Logger log = Logger.getLogger(ProductService.class.getName());
@@ -18,7 +22,7 @@ public class ProductServiceBean implements ProductService {
     private ProducerDao producerDao;
     private WarehouseDao warehouseDao;
     private ProductDao productDao;
-
+    @Autowired
     public ProductServiceBean(ProducerDao producerDao, WarehouseDao warehouseDao, ProductDao productDao) {
         this.producerDao = producerDao;
         this.warehouseDao = warehouseDao;

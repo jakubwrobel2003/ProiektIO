@@ -1,5 +1,7 @@
 package magazyn.model; // Zmieniono z vod
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +10,7 @@ public class Warehouse {
     private int id;
     private String name;
     private String location;
+    @JsonIgnore
     private List<Product> products = new ArrayList<>();
 
     public Warehouse(int id, String name, String location) {

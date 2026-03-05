@@ -4,10 +4,11 @@ import magazyn.repository.ProductDao;
 import magazyn.model.Warehouse;
 import magazyn.model.Producer;
 import magazyn.model.Product;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Component
 public class MemProductDao implements ProductDao {
     @Override
     public List<Product> findAll() {
