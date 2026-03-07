@@ -8,7 +8,6 @@ import java.util.List;
 public interface ProductDao {
     List<Product> findAll();
     Product findById(int id);
-    List<Product> findByProducer(Producer p);
-    List<Product> findByWarehouse(Warehouse w);
+
     Product add(Product p);
 }

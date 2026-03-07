@@ -7,16 +7,13 @@ import java.util.List;
 public interface ProductService {
 
     List<Product> getAllProducts();
-
-    List<Product> getProductsByProducer(Producer p);
-
     Product getProductById(int id);
-
-    Product addProduct(Product p);
+    // Nowa wersja: dodaje produkt i opcjonalnie inicjuje stan w magazynie
+    Product addProduct(Product p, int initialWarehouseId, int amount);
 
     List<Producer> getAllProducers();
-
     Producer getProducerById(int id);
-
     Producer addProducer(Producer p);
+
+    int getTotalQuantity(int productId);
 }

@@ -1,0 +1,41 @@
+### 1. Get all warehouses
+GET http://localhost:8080/api/warehouse
+Accept: application/json
+
+### 2. Get warehouse by ID (e.g., Łódź)
+GET http://localhost:8080/api/warehouse/1
+Accept: application/json
+
+### 3. Check inventory of warehouse No. 1 (What is there and how much?)
+GET http://localhost:8080/api/warehouse/1/inventory
+Accept: application/json
+
+### 4. Check where product No. 1 is located (e.g., Nike T-shirt) and in what quantity
+GET http://localhost:8080/api/product/1/inventory
+Accept: application/json
+
+### 5. Post a new warehouse (e.g., your training base)
+POST http://localhost:8080/api/warehouse
+Content-Type: application/json
+
+{
+  "name": "Magazyn Wadowice",
+  "location": "ul. Jana Pawła II 2, 34-100 Wadowice"
+}
+### 5.1 ERROR Post a new warehouse (e.g., your training base)
+POST http://localhost:8080/api/warehouse
+Content-Type: application/json
+Accept-Language: en
+
+{
+  "name": "a",
+  "location": "ul. Jana Pawła II 2, 34-100 Wadowice"
+
+}
+### 6. Get total stock of product No. 1 (e.g., Nike T-shirt) across all warehouses
+GET http://localhost:8080/api/product/1/total-quantity
+Accept: application/json
+
+### 7. Get all products
+GET http://localhost:8080/api/product
+Accept: application/json

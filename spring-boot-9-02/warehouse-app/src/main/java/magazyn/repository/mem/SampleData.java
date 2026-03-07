@@ -1,5 +1,6 @@
-package magazyn.repository.mem; // Zmieniono z vod
+package magazyn.repository.mem;
 
+import magazyn.model.Inventory;
 import magazyn.model.Warehouse;
 import magazyn.model.Producer;
 import magazyn.model.Product;
@@ -7,81 +8,71 @@ import magazyn.model.Product;
 import java.util.ArrayList;
 import java.util.List;
 
-class SampleData {
+public class SampleData {
 
-
-    static List<Warehouse> warehouses = new ArrayList<>();
-    static List<Producer> producers = new ArrayList<>();
-    static List<Product> products = new ArrayList<>();
+    public static List<Warehouse> warehouses = new ArrayList<>();
+    public static List<Producer> producers = new ArrayList<>();
+    public static List<Product> products = new ArrayList<>();
+    public static List<Inventory> inventories = new ArrayList<>();
 
     static {
+        // 1. Producenci (Marki odzieżowe)
+        Producer nike = new Producer(1, "Nike", "USA");
+        Producer adidas = new Producer(2, "Adidas", "Niemcy");
+        Producer patagonia = new Producer(3, "Patagonia", "USA");
+        Producer levis = new Producer(4, "Levi's", "USA");
 
-        Producer bosch = new Producer(1, "Bosch", "Niemcy");
-        Producer makita = new Producer(2, "Makita", "Japonia");
-        Producer dewalt = new Producer(3, "DeWalt", "USA");
-        Producer festool = new Producer(4, "Festool", "Niemcy");
+        // 2. Produkty (Ubrania)
+        Product tShirt = new Product(1, "Koszulka Dri-FIT", "TSH-N01", nike, "Sport");
+        Product shorts = new Product(2, "Spodenki Run 5", "SHO-N02", nike, "Sport");
+        Product hoodie = new Product(3, "Bluza Trefoil", "HOD-A01", adidas, "Casual");
+        Product jacket = new Product(4, "Kurtka Torrentshell", "JAC-P01", patagonia, "Outdoor");
+        Product jeans = new Product(5, "Jeansy 501 Original", "JNS-L01", levis, "Casual");
+        Product beanie = new Product(6, "Czapka Zimowa", "CAP-A02", adidas, "Akcesoria");
 
+        // 3. Wiązanie produktów z markami (Używamy setBrand z Lomboka)
+        bind(tShirt, nike);
+        bind(shorts, nike);
+        bind(hoodie, adidas);
+        bind(beanie, adidas);
+        bind(jacket, patagonia);
+        bind(jeans, levis);
 
-        // Pola: id, nazwa, skuCode (zamiast poster), producent, ilość (zamiast rating)
-        Product wiertarka = new Product(1, "Wiertarka Udarowa", "SKU-B01", bosch, 50);
-        Product szlifierka = new Product(2, "Szlifierka Kątowa", "SKU-B02", bosch, 30);
-        Product wkretarka = new Product(3, "Wkrętarka AKU", "SKU-M01", makita, 100);
-        Product wyrzynarka = new Product(4, "Wyrzynarka", "SKU-M02", makita, 40);
-        Product mlot = new Product(5, "Młot Wyburzeniowy", "SKU-D01", dewalt, 15);
-        Product pilarka = new Product(6, "Pilarka Tarczowa", "SKU-F01", festool, 10);
+        // 4. Magazyny (Lokalizacje)
+        Warehouse centralny = new Warehouse(1, "Magazyn Główny", "Łódź, ul. Tekstylna 10");
+        Warehouse polnoc = new Warehouse(2, "Outlet Gdańsk", "Gdańsk, ul. Bałtycka 5");
+        Warehouse zachod = new Warehouse(3, "Centrum Wrocław", "Wrocław, ul. Modna 22");
+        Warehouse rzeszow = new Warehouse(4, "Punkt Południe", "Rzeszów, ul. Rynkowa 1");
 
-        // 3. Wiązanie produktów z producentami (Relacja 1 do wielu) [cite: 177, 181]
-        bind(wiertarka, bosch);
-        bind(szlifierka, bosch);
-        bind(wkretarka, makita);
-        bind(wyrzynarka, makita);
-        bind(mlot, dewalt);
-        bind(pilarka, festool);
-
-        // 4. Tworzenie magazynów (odpowiednik Cinema) [cite: 101, 205-207]
-        Warehouse centralny = new Warehouse(1, "Magazyn Centralny", "Warszawa, ul. Logistyczna 1");
-        Warehouse polnoc = new Warehouse(2, "Filia Północ", "Gdańsk, ul. Portowa 5");
-        Warehouse zachod = new Warehouse(3, "Centrum Poznań", "Poznań, ul. Przemysłowa 10");
-        Warehouse rzeszow = new Warehouse(4, "Punkt Rzeszów", "Rzeszów, ul. Transportowa 2");
-
-        // 5. Wiązanie magazynów z produktami (Relacja wiele do wielu)
-        bind(centralny, wiertarka);
-        bind(centralny, wkretarka);
-        bind(polnoc, wiertarka);
-        bind(polnoc, mlot);
-        bind(zachod, szlifierka);
-        bind(zachod, pilarka);
-        bind(rzeszow, wkretarka);
-        bind(rzeszow, wyrzynarka);
+        // 5. Wiązanie Magazyn + Produkt + Ilość przez Inventory
+        bind(tShirt, centralny, 100);
+        bind(tShirt, polnoc, 50);
+        bind(shorts, centralny, 80);
+        bind(jacket, zachod, 20);
+        bind(jeans, rzeszow, 60);
+        bind(hoodie, centralny, 40);
 
         // 6. Dodawanie do list statycznych
-        products.add(wiertarka);
-        products.add(szlifierka);
-        products.add(wkretarka);
-        products.add(wyrzynarka);
-        products.add(mlot);
-        products.add(pilarka);
-
-        producers.add(bosch);
-        producers.add(makita);
-        producers.add(dewalt);
-        producers.add(festool);
-
-        warehouses.add(centralny);
-        warehouses.add(polnoc);
-        warehouses.add(zachod);
-        warehouses.add(rzeszow);
+        products.addAll(List.of(tShirt, shorts, hoodie, jacket, jeans, beanie));
+        producers.addAll(List.of(nike, adidas, patagonia, levis));
+        warehouses.addAll(List.of(centralny, polnoc, zachod, rzeszow));
     }
 
-    // Metoda wiążąca Magazyn z Produktem (bidirectional)
-    private static void bind(Warehouse w, Product p) {
-        w.addProduct(p); // Zmieniono z addMovie
-        p.addWarehouse(w); // Zmieniono z addCinema
+    /**
+     * Kluczowa metoda wiążąca Magazyn z Produktem poprzez Inventory.
+     * To tutaj zapisujemy ilość towaru w konkretnym miejscu.
+     */
+    private static void bind(Product p, Warehouse w, int amount) {
+        Inventory item = new Inventory(p, w, amount);
+        inventories.add(item);
+
     }
 
-    // Metoda wiążąca Produkt z Producentem (bidirectional)
+    /**
+     * Metoda wiążąca Produkt z Producentem (Marką).
+     */
     private static void bind(Product p, Producer pr) {
-        pr.addProduct(p); // Zmieniono z addMovie
-        p.setProducer(pr); // Zmieniono z setDirector
+        pr.addProduct(p); // Dodaje do List<Product> w klasie Producer
+        p.setBrand(pr);   // Ustawia pole brand w klasie Product (Lombok)
     }
 }

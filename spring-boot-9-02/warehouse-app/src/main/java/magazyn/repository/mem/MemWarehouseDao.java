@@ -1,13 +1,15 @@
 package magazyn.repository.mem;
 
+import magazyn.model.Inventory;
 import magazyn.repository.WarehouseDao;
 import magazyn.model.Warehouse;
 import magazyn.model.Product;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
-@Component("WarehouseDao")
+@Repository("WarehouseDao")
 public class MemWarehouseDao implements WarehouseDao {
 
     @Override
@@ -24,9 +26,18 @@ public class MemWarehouseDao implements WarehouseDao {
     }
 
     @Override
-    public List<Warehouse> findByProduct(Product p) {
-        return SampleData.warehouses.stream()
-                .filter(w -> w.getProducts().contains(p))
-                .collect(Collectors.toList()); // [cite: 175]
+    public Warehouse save(Warehouse w) {
+        if (w.getId() == 0) {
+            int max = SampleData.warehouses.stream()
+                    .mapToInt(Warehouse::getId)
+                    .max()
+                    .orElse(0); // [cite: 181]
+            w.setId(++max);
+            SampleData.warehouses.add(w);
+        } else {
+            SampleData.warehouses.removeIf(wh -> wh.getId() == w.getId());
+            SampleData.warehouses.add(w);
+        }
+        return w;
     }
 }

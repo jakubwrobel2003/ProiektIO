@@ -7,5 +7,6 @@ import java.util.List;
 public interface WarehouseDao {
     List<Warehouse> findAll();
     Warehouse findById(int id);
-    List<Warehouse> findByProduct(Product p);
+
+    Warehouse save(Warehouse w);
 }

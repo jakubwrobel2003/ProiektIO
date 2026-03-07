@@ -9,17 +9,9 @@
         <outputRelativeToContentRoot value="true" />
         <module name="magazyn-app" />
       </profile>
-      <profile name="Annotation profile for magazynn-app" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
-        </processorPath>
-        <module name="magazynn-app" />
-      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="magazynn-app" target="1.8" />
       <module name="warehouse-app" target="17" />
     </bytecodeTargetLevel>
   </component>

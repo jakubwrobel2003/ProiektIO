@@ -1,68 +1,78 @@
 package magazyn.service.impl;
 
-import magazyn.repository.ProducerDao; // Zmieniono z DirectorDao
-import magazyn.repository.WarehouseDao; // Zmieniono z CinemaDao
-import magazyn.repository.ProductDao; // Zmieniono z MovieDao
-import magazyn.model.Warehouse;
-import magazyn.model.Producer;
-import magazyn.model.Product;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import magazyn.model.*;
+import magazyn.repository.*;
 import magazyn.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.logging.Logger;
-@Component
-@Scope("prototype")
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
 public class ProductServiceBean implements ProductService {
 
-    private static final Logger log = Logger.getLogger(ProductService.class.getName());
+    private final ProductDao productDao;
+    private final ProducerDao producerDao;
+    private final WarehouseDao warehouseDao;
+    private final InventoryDao inventoryDao; // Dodajemy to wstrzyknięcie
 
-    private ProducerDao producerDao;
-    private WarehouseDao warehouseDao;
-    private ProductDao productDao;
-    @Autowired
-    public ProductServiceBean(ProducerDao producerDao, WarehouseDao warehouseDao, ProductDao productDao) {
-        this.producerDao = producerDao;
-        this.warehouseDao = warehouseDao;
-        this.productDao = productDao;
-    }
-
+    @Override
     public List<Product> getAllProducts() {
-        log.info("searching all products...");
+        log.info("Fetching all products from catalog");
         return productDao.findAll();
     }
 
-    public List<Product> getProductsByProducer(Producer p) {
-        log.info("searching products by producer " + p.getId());
-        return productDao.findByProducer(p);
-    }
-
+    @Override
     public Product getProductById(int id) {
-        log.info("searching product by id " + id);
+        log.info("Searching for product with ID: {}", id);
         return productDao.findById(id);
     }
 
+    @Override
+    public Product addProduct(Product p, int warehouseId, int amount) {
+        log.info("Adding new product: {} to warehouse ID: {} with amount: {}", p.getName(), warehouseId, amount);
+
+        Product savedProduct = productDao.add(p);
+
+        Warehouse warehouse = warehouseDao.findById(warehouseId);
+
+        if (warehouse != null && amount > 0) {
+            Inventory newRecord = new Inventory(savedProduct, warehouse, amount);
+            magazyn.repository.mem.SampleData.inventories.add(newRecord);
+            log.info("Inventory successfully initialized for: {}", savedProduct.getName());
+        } else {
+            log.warn("Product added to catalog, but inventory not initialized (Warehouse not found or amount <= 0)");
+        }
+
+        return savedProduct;
+    }
+
+    @Override
     public List<Producer> getAllProducers() {
-        log.info("searching all producers");
+        log.info("Fetching all producers");
         return producerDao.findAll();
     }
 
+    @Override
     public Producer getProducerById(int id) {
-        log.info("searching producer by id " + id);
+        log.info("Searching for producer with ID: {}", id);
         return producerDao.findById(id);
     }
 
     @Override
-    public Product addProduct(Product p) {
-        log.info("about to add product " + p);
-        return productDao.add(p);
+    public Producer addProducer(Producer p) {
+        log.info("Adding new producer: {}", p.getName());
+        return producerDao.add(p);
     }
 
+
     @Override
-    public Producer addProducer(Producer p) {
-        log.info("about to add producer " + p);
-        return producerDao.add(p);
+    public int getTotalQuantity(int productId) {
+        log.info("Calculating total quantity for product ID: {}", productId);
+        List<Inventory> productStocks = inventoryDao.findByProductId(productId);
+        return inventoryDao.getTotalQuantity(productId);
     }
 }

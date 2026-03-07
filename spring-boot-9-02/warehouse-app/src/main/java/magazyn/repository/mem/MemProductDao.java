@@ -1,14 +1,16 @@
 package magazyn.repository.mem;
 
+import magazyn.model.Inventory;
 import magazyn.repository.ProductDao;
 import magazyn.model.Warehouse;
 import magazyn.model.Producer;
 import magazyn.model.Product;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
-@Component
+@Repository("ProductDao")
 public class MemProductDao implements ProductDao {
     @Override
     public List<Product> findAll() {
@@ -23,19 +25,7 @@ public class MemProductDao implements ProductDao {
                 .orElse(null); // [cite: 164-165, 173]
     }
 
-    @Override
-    public List<Product> findByProducer(Producer p) {
-        return SampleData.products.stream()
-                .filter(prod -> prod.getProducer().equals(p))
-                .collect(Collectors.toList()); // [cite: 174-175]
-    }
 
-    @Override
-    public List<Product> findByWarehouse(Warehouse w) {
-        return SampleData.products.stream()
-                .filter(p -> p.getWarehouses().contains(w))
-                .collect(Collectors.toList()); // [cite: 175]
-    }
 
     @Override
     public Product add(Product p) {
