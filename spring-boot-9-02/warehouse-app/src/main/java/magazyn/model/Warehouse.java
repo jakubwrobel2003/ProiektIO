@@ -1,13 +1,14 @@
 package magazyn.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 
-@Data // Dodajmy Lombok, żeby pozbyć się ręcznych getterów i setterów
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Warehouse {
@@ -17,5 +18,14 @@ public class Warehouse {
     private String name;
     private String location;
 
-    // LISTA PRODUCTS USUNIĘTA
+    @ToString.Exclude
+    @JsonIgnore
+    private List<Product> products = new ArrayList<>(); // Inicjalizacja zapobiega null
+
+    // Konstruktor dla SampleData
+    public Warehouse(int id, String name, String location) {
+        this.id = id;
+        this.name = name;
+        this.location = location;
+    }
 }

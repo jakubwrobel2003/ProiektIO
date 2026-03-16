@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>VOD - Produkty</title>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<header>
+    <h1 th:text="${title}">Produkty</h1>
+</header>
+<section>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th> <th>Nazwa</th>
+            <th>SKU</th>
+            <th>Kategoria</th> <th>Producent (Kraj)</th> <th>Akcje</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${products}">
+            <td th:text="${p.id}">0</td>
+
+            <td th:text="${p.name}">Nazwa</td>
+            <td th:text="${p.skuCode}">SKU</td>
+
+            <td th:text="${p.category}">Kategoria</td>
+
+            <td>
+                <span th:if="${p.brand != null}">
+                    <a th:href="@{/view/products(producerId=${p.brand.id})}"
+                       th:text="${p.brand.name}">Producent</a>
+                    <small th:text="' (' + ${p.brand.country} + ')'"></small>
+                </span>
+                <span th:if="${p.brand == null}">Brak</span>
+            </td>
+
+            <td>
+                <a th:href="@{/view/warehouses(productId=${p.id})}" title="Pokaż magazyny">
+                    <img th:src="@{/img/search.png}" class="search-icon" alt="Lokalizacje"/>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+</body>
+</html>

@@ -20,11 +20,11 @@ public class Producer {
     @NotNull
     private String country;
 
-    @ToString.Exclude // Bardzo ważne: zapobiega pętli w metodzie toString()
-    @JsonIgnore       // Zapobiega pętli przy generowaniu JSON w API
+    @ToString.Exclude
+    @JsonIgnore
     private List<Product> products = new ArrayList<>();
 
-    // Konstruktor bez listy dla wygody w SampleData
+
     public Producer(int id, String name, String country) {
         this.id = id;
         this.name = name;

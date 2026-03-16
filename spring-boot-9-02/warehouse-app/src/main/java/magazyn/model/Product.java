@@ -1,14 +1,16 @@
 package magazyn.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data // Generuje: Gettery, Settery, toString, equals, hashCode
-@NoArgsConstructor // Wymagany pusty konstruktor
-@AllArgsConstructor // Konstruktor ze wszystkimi polami
+import java.util.ArrayList;
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
     private int id;
     @NotNull
@@ -16,7 +18,20 @@ public class Product {
     private String name;
     @NotNull
     private String skuCode;
-    @NotNull
+
     private Producer brand;
     private String category;
+
+    @ToString.Exclude
+    @JsonIgnore
+    private List<Warehouse> warehouses = new ArrayList<>(); // Inicjalizacja zapobiega null
+
+
+    public Product(int id, String name, String skuCode, Producer brand, String category) {
+        this.id = id;
+        this.name = name;
+        this.skuCode = skuCode;
+        this.brand = brand;
+        this.category = category;
+    }
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>VOD - Producenci</title>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<header>
+    <h1 th:text="${title}">Producenci</h1>
+</header>
+<section>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nazwa Marki</th>
+            <th>Kraj</th>
+            <th>Liczba Produktów</th>
+            <th>Szczegóły</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="pr : ${producers}">
+            <td th:text="${pr.id}">1</td>
+            <td th:text="${pr.name}">Nike</td>
+            <td th:text="${pr.country}">USA</td>
+            <td th:text="${pr.products.size()}">0</td>
+            <td>
+                <a th:href="@{/view/products(producerId=${pr.id})}">
+                    <img th:src="@{/img/search.png}" class="search-icon" alt="Produkty"/>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+</body>
+</html>

@@ -1,20 +1,20 @@
-### 1. Get all warehouses
+### 1. Pobierz wszystkie magazyny
 GET http://localhost:8080/api/warehouse
 Accept: application/json
 
-### 2. Get warehouse by ID (e.g., Łódź)
+### 2. Pobierz magazyn po ID (np. Łódź)
 GET http://localhost:8080/api/warehouse/1
 Accept: application/json
 
-### 3. Check inventory of warehouse No. 1 (What is there and how much?)
+### 3. Sprawdź produkty w magazynie nr 1
 GET http://localhost:8080/api/warehouse/1/inventory
 Accept: application/json
 
-### 4. Check where product No. 1 is located (e.g., Nike T-shirt) and in what quantity
+### 4. Sprawdź w jakich magazynach znajduje się produkt nr 1
 GET http://localhost:8080/api/product/1/inventory
 Accept: application/json
 
-### 5. Post a new warehouse (e.g., your training base)
+### 5. Dodaj nowy magazyn
 POST http://localhost:8080/api/warehouse
 Content-Type: application/json
 
@@ -22,20 +22,51 @@ Content-Type: application/json
   "name": "Magazyn Wadowice",
   "location": "ul. Jana Pawła II 2, 34-100 Wadowice"
 }
-### 5.1 ERROR Post a new warehouse (e.g., your training base)
+
+### 5.1 Test błędu walidacji (zbyt krótka nazwa)
 POST http://localhost:8080/api/warehouse
 Content-Type: application/json
-Accept-Language: en
+Accept-Language: pl
 
 {
-  "name": "a",
-  "location": "ul. Jana Pawła II 2, 34-100 Wadowice"
-
+  "name": "Ma",
+  "location": "Wadowice"
 }
-### 6. Get total stock of product No. 1 (e.g., Nike T-shirt) across all warehouses
+
+### 6. Pobierz łączną liczbę magazynów, w których jest produkt nr 1
 GET http://localhost:8080/api/product/1/total-quantity
 Accept: application/json
 
-### 7. Get all products
+### 7. Pobierz wszystkie produkty
 GET http://localhost:8080/api/product
+Accept: application/json
+
+### 8. Pobierz konkretny produkt
+GET http://localhost:8080/api/product/1
+Accept: application/json
+
+### 9. Pobierz produkt po kodzie SKU
+GET http://localhost:8080/api/product/sku/TSH-N01
+Accept: application/json
+
+### 10. Dodaj nowy produkt do katalogu
+POST http://localhost:8080/api/product
+Content-Type: application/json
+
+{
+  "name": "Nowa Koszulka Nike",
+  "skuCode": "TSHS-N99",
+  "category": "Sport",
+  "brand": {
+    "id": 1,
+    "name": "Nike",
+    "country": "USA"
+  }
+}
+### Test wyszukiwania (phrase)
+GET http://localhost:8080/api/warehouse?phrase=Główny
+Accept: application/json
+
+### Test wyzwalania błędu (dla WarehouseAdvice)
+GET http://localhost:8080/api/warehouse?phrase=foo
 Accept: application/json

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>VOD - Magazyny</title>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<header>
+    <h1 th:text="${title}">Magazyny</h1>
+</header>
+<section>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nazwa</th>
+            <th>Lokalizacja</th>
+            <th>Produkty</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="w : ${warehouses}">
+            <td th:text="${w.id}">1</td>
+            <td th:text="${w.name}">Nazwa</td>
+            <td th:text="${w.location}">Lokalizacja</td>
+            <td>
+                <a th:href="@{/view/products(warehouseId=${w.id})}">
+                    <img th:src="@{/img/search.png}" class="search-icon" alt="Szukaj"/>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+</body>
+</html>
