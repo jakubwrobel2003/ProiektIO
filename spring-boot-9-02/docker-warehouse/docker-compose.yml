@@ -1,0 +1,17 @@
+version: '4.65'
+
+services:
+  mysql-book:
+    image: mysql:8.0
+    container_name: magazyn-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: magazyn_db
+      MYSQL_ROOT_PASSWORD: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-init.d
+
+

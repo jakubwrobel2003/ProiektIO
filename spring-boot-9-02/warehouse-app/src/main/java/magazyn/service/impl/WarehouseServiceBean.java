@@ -6,11 +6,14 @@ import magazyn.model.Warehouse;
 import magazyn.repository.WarehouseDao;
 import magazyn.service.WarehouseService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class WarehouseServiceBean implements WarehouseService {
 
     private final WarehouseDao warehouseDao;

@@ -5,6 +5,9 @@ package magazyn;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j; // Opcjonalne: do logowania [cite: 273]
 import magazyn.model.Warehouse;
+import magazyn.repository.ProducerDao;
+import magazyn.repository.ProductDao;
+import magazyn.repository.WarehouseDao;
 import magazyn.service.WarehouseService;
 import org.springframework.stereotype.Component;
 import java.util.List;

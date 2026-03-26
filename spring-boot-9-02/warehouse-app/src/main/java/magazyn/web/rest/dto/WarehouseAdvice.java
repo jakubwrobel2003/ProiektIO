@@ -41,4 +41,9 @@ public class WarehouseAdvice {
         // Zwracamy status 418 (I_AM_A_TEAPOT) dla zabawy lub 400 (Bad Request)
         return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body("Obsłużony błąd: " + e.getMessage());
     }
+    @ExceptionHandler(Exception.class)
+    ResponseEntity<String> handleException(Exception e) {
+        log.error("generic expetio",e);
+        return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body(e.getMessage());
+    }
 }

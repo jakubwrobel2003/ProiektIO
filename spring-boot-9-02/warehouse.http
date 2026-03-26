@@ -58,7 +58,7 @@ Content-Type: application/json
   "skuCode": "TSHS-N99",
   "category": "Sport",
   "brand": {
-    "id": 1,
+    "id": 5,
     "name": "Nike",
     "country": "USA"
   }

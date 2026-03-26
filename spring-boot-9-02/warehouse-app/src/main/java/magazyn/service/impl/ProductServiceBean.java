@@ -5,19 +5,25 @@ import lombok.extern.slf4j.Slf4j;
 import magazyn.model.*;
 import magazyn.repository.*;
 import magazyn.service.ProductService;
+import magazyn.service.WarehouseService;
 import org.springframework.stereotype.Service;
 import java.util.List;
-
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ProductServiceBean implements ProductService {
 
     private final ProductDao productDao;
     private final ProducerDao producerDao;
     private final WarehouseDao warehouseDao;
-    // USUNIĘTO: inventoryDao
-
+    private final PlatformTransactionManager transactionManager;
     @Override
     public List<Product> getAllProducts() {
         return productDao.findAll();
@@ -27,8 +33,8 @@ public class ProductServiceBean implements ProductService {
     public Product getProductById(int id) {
         return productDao.findById(id);
     }
-
     @Override
+    @Transactional(propagation = Propagation.REQUIRED) // Podejście deklaratywne [cite: 598, 623]
     public Product addProduct(Product p, int warehouseId) {
         log.info("Adding product: {} to warehouse ID: {}", p.getName(), warehouseId);
 
@@ -36,11 +42,12 @@ public class ProductServiceBean implements ProductService {
         Warehouse warehouse = warehouseDao.findById(warehouseId);
 
         if (warehouse != null) {
-            // Logika bezpośredniego powiązania list
             savedProduct.getWarehouses().add(warehouse);
             warehouse.getProducts().add(savedProduct);
-            log.info("Product-Warehouse link established");
+            warehouseDao.save(warehouse); // Aktualizacja relacji w bazie [cite: 628]
         }
+
+        // Jeśli tu poleci RuntimeException, nastąpi automatyczny rollback
         return savedProduct;
     }
 
