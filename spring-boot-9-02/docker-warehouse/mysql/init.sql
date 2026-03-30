@@ -34,3 +34,21 @@ CREATE TABLE product_warehouse (
                                    CONSTRAINT fk_pw_product FOREIGN KEY (product_id) REFERENCES product(id),
                                    CONSTRAINT fk_pw_warehouse FOREIGN KEY (warehouse_id) REFERENCES warehouse(id)
 );
+
+-- Tabela użytkowników
+CREATE TABLE user (
+                      id INT PRIMARY KEY AUTO_INCREMENT,
+                      username VARCHAR(255) UNIQUE NOT NULL,
+                      password VARCHAR(255) NOT NULL,
+                      enabled BOOLEAN DEFAULT TRUE
+);
+
+-- Tabela ról
+CREATE TABLE role (
+                      id INT PRIMARY KEY AUTO_INCREMENT,
+                      username VARCHAR(255),
+                      role VARCHAR(255),
+                      CONSTRAINT fk_user_role FOREIGN KEY (username) REFERENCES user(username)
+);
+INSERT INTO user (username, password) VALUES ('admin', 'admin123');
+INSERT INTO role (username, role) VALUES ('admin', 'ROLE_ADMIN');

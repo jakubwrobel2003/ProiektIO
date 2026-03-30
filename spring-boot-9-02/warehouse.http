@@ -70,3 +70,60 @@ Accept: application/json
 ### Test wyzwalania błędu (dla WarehouseAdvice)
 GET http://localhost:8080/api/warehouse?phrase=foo
 Accept: application/json
+### --- TESTY SPRING SECURITY ---
+
+### 11. Test POST bez logowania (Powinien zwrócić 401 Unauthorized)
+POST http://localhost:8080/api/product
+Content-Type: application/json
+
+{
+  "name": "Produkt Anonimowy",
+  "skuCode": "SEC-001",
+  "category": "Test",
+  "brand": { "id": 1 }
+}
+
+### 12. Test POST z błędnym logowaniem (Powinien zwrócić 401 Unauthorized)
+POST http://localhost:8080/api/product
+Authorization: Basic zly_user zly_password
+Content-Type: application/json
+
+{
+  "name": "Produkt Blad",
+  "skuCode": "SEC-002",
+  "brand": { "id": 1 }
+}
+
+### 13. Test POST z poprawnym logowaniem ADMIN (Powinien zwrócić 201 Created)
+POST http://localhost:8080/api/product
+Authorization: Basic admin admin123
+Content-Type: application/json
+
+{
+  "name": "Produkt Admina",
+  "skuCode": "SEC-OK",
+  "category": "Security",
+  "brand": { "id": 5 }
+}
+
+### 14. Test POST z logowaniem USER (Powinien zwrócić 403 Forbidden)
+# Użytkownik 'user' ma rolę REGULAR, a wymagana jest ADMIN [cite: 386]
+POST http://localhost:8080/api/warehouse
+Authorization: Basic user user123
+Content-Type: application/json
+
+{
+  "name": "Magazyn Usera",
+  "location": "Kraków"
+}
+
+### --- TESTY SPRING ACTUATOR & INFO ---
+
+### 15. Sprawdź status aplikacji i bazy danych
+GET http://localhost:8080/actuator/health
+Accept: application/json
+
+### 16. Sprawdź własne informacje (WarehouseContributor)
+# Tutaj zobaczysz pole "produkt_count" z Twojej klasy
+GET http://localhost:8080/actuator/info
+Accept: application/json
